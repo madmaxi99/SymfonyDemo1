@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ssh \
     nano \
     git \
+    iproute2 \
     && docker-php-ext-install pdo_mysql zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -13,12 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-# Configure Xdebug
-RUN echo "xdebug.mode=debug,coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+# Create log directory for Xdebug
+RUN mkdir -p /var/log/xdebug
 
 # Install additional PHP extension
 RUN docker-php-ext-install pcntl
