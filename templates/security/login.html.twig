@@ -1,0 +1,13 @@
+{# templates/security/login.html.twig #}
+<h1>Login</h1>
+<form action="{{ path('login') }}" method="post">
+    <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="_username" required>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="_password" required>
+    </div>
+    <button type="submit">Login</button>
+</form>

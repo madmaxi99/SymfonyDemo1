@@ -26,9 +26,7 @@ services:
       - composer:/var/www/.composer:rw
       - $SSH_AUTH_SOCK:/ssh-agent
     depends_on:
-      - db_asia
-      - db_america
-      - db_europe
+      - database
     environment:
        SSH_AUTH_SOCK: /ssh-agent
        SSH_AGENT_PID: $SSH_AGENT_PID
@@ -45,9 +43,7 @@ services:
     environment:
       APPLICATION_ENV: development
     depends_on:
-      - db_asia
-      - db_america
-      - db_europe
+      - database
     working_dir: /app
 
   node:
@@ -69,45 +65,22 @@ services:
     image: phpmyadmin/phpmyadmin
     restart: no
     depends_on:
-      - db_europe
+      - database
     environment:
-      PMA_HOSTS: db_america, db_asia, db_europe
+      PMA_HOSTS: database
       PMA_PORT: 3306
     ports:
       - "8081:80"
 
-  db_america:
+  database:
     image: mariadb
     env_file: database/database.env
     volumes:
-      - db_data_america:/var/lib/mysql
-      - ./../america/PriceEntity.sql:/docker-entrypoint-initdb.d/init.sql
-    expose:
-      - 3306
-    restart: no
-
-  db_asia:
-    image: mariadb
-    env_file: database/database.env
-    volumes:
-      - db_data_asia:/var/lib/mysql
-      - ./../asia/PriceEntity.sql:/docker-entrypoint-initdb.d/init.sql
-    expose:
-      - 3306
-    restart: no
-
-  db_europe:
-    image: mariadb
-    env_file: database/database.env
-    volumes:
-      - db_data_europe:/var/lib/mysql
-      - ./../europe/PriceEntity.sql:/docker-entrypoint-initdb.d/init.sql
+      - database_data:/var/lib/mysql
     ports:
       - "3306:3306"
     restart: no
 
 volumes:
   composer:
-  db_data_america:
-  db_data_asia:
-  db_data_europe:
+  database_data:

@@ -1,0 +1,5 @@
+{# templates/default/secured.html.twig #}
+<h1>Geschützte Seite</h1>
+<p>Diese Seite ist nur für angemeldete Benutzer zugänglich.</p>
+<p>Willkommen, {{ app.user.username }}!</p>
+<a href="{{ path('logout') }}">Logout</a>
